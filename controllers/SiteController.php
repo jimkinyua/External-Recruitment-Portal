@@ -9,6 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\helpers\Html;
+use yii\filters\ContentNegotiator;
+
+
 
 class SiteController extends Controller
 {
@@ -20,12 +24,16 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'get-vaccanices'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+
+                        'actions' => ['get-vaccanices'],
+                        'allow' => true,
+                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -35,6 +43,14 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            'contentNegotiator' =>[
+                'class' => ContentNegotiator::class,
+                'only' => ['get-vaccanices'],
+                'formatParam' => '_format',
+                'formats' => [
+                    'application/json' => Response::FORMAT_JSON,
+                ],
+            ]
         ];
     }
 
@@ -84,6 +100,52 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
         ]);
+    }
+
+    public function actionGetVaccanices(){
+        $service = Yii::$app->params['ServiceName']['JobsList'];
+
+        $Vaccancies = Yii::$app->navhelper->getData($service);
+
+        // echo '<pre>';
+        // print_r($Vaccancies);
+        // exit;
+
+
+        $result = [];
+        $count = 0;
+      
+        if(!is_object($Vaccancies)){
+            foreach($Vaccancies as $Vaccancy){
+
+                if(empty($Vaccancy->Job_Description) && empty($Vaccancy->Contract_Period)){ //Useless Vaccancy this One
+                    continue;
+                }
+                ++$count;
+                $link = $updateLink =  '';
+                // $data = $this->ApplicantDetailWithDocNum($Vaccancy->Application_No);
+
+
+                // if($data->Portal_Status == 'New'){
+                    $updateLink = Html::a('View Details',['view','Key'=> urlencode($Vaccancy->Key) ],['class'=>'update btn btn-info btn-md']);
+                // }else{
+                //     $updateLink = '';
+                //     $link = '';
+                // }
+
+                $result['data'][] = [
+                    'index' => $count,
+                    'Job_Description' => !empty($Vaccancy->Job_Description)?$Vaccancy->Job_Description:'',
+                    'No_Posts' => !empty($Vaccancy->No_Posts)?$Vaccancy->No_Posts:'',
+                    'Employment_Type' => !empty($Vaccancy->Employment_Type)?$Vaccancy->Employment_Type:'',
+                    'Contract_Period' => !empty($Vaccancy->Contract_Period)?$Vaccancy->Contract_Period:'',
+                    'End_Date' => !empty($Vaccancy->End_Date)?$Vaccancy->End_Date:'',                    
+                    'Update_Action' => $updateLink,
+                ];
+            }
+        
+        }
+        return $result;
     }
 
     /**

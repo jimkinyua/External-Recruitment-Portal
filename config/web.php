@@ -43,14 +43,24 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        
+        'navision' => [
+            'class' => 'app\Library\Navision',
+        ],
+        'navhelper' => [
+            'class' => 'app\Library\Navhelper',
+        ],
+        'recruitment' => [
+            'class' => 'app\Library\Recruitment'
+        ],
+        
     ],
     'params' => $params,
 ];
