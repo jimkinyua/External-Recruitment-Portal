@@ -153,18 +153,30 @@ class SiteController extends Controller
         $model = new JobsCard();
         $service = Yii::$app->params['ServiceName']['JobsCard'];
         $result = Yii::$app->navhelper->readByKey($service, urldecode($Key));
-
-        // echo '<pre>';
-        // print_r($result);
-        // exit;
-
-        // $model = $this->loadtomodel($result,$model);
-
         return $this->render('view',[
             'model' => $result,
         ]);
     }
 
+    public function actionApplicationMethods($Key){
+        $model = new JobsCard();
+        $service = Yii::$app->params['ServiceName']['JobsCard'];
+        $result = Yii::$app->navhelper->readByKey($service, urldecode($Key));
+        return $this->renderAjax('application-method',[
+            'model' => $result,
+        ]);
+    }
+
+    public function actionApply($JobId, $ApplicationMethod){
+
+        if(Yii::$app->user->isGuest){
+            $RequisitionId = Yii::$app->request->get('JobId');
+            $ApplicationMethod = Yii::$app->request->get('ApplicationMethod');
+            Yii::$app->user->setReturnUrl(['site/apply','JobId'=> $RequisitionId, 'ApplicationMethod'=>$ApplicationMethod]);
+           return Yii::$app->response->redirect(['site/login']);           
+        }
+        
+    }
     /**
      * Logout action.
      *

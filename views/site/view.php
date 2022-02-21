@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 $this->title = 'Job Details'
 ?>
       <div class="row">
@@ -8,7 +9,10 @@ $this->title = 'Job Details'
             <div class="blog-post">
                 <h2 class="blog-post-title"><?= $model->Job_Description ?></h2>
                 <p class="blog-post-meta"> Employment Type: <strong> <?= $model->Employment_Type ?> </strong> </p>
-                <p><a class="btn btn-lg btn-success pull-right" href="#">Apply</a></p>
+               
+         
+                <?= \yii\helpers\Html::a('Apply For This Role',Url::to(['application-methods', 'Key'=>$model->Key]),['class' => 'btn btn-success Apply']) ?>
+
 
                 <hr>
                 <table class="table table-bordered">
@@ -80,15 +84,14 @@ $this->title = 'Job Details'
 <?php
 
 $script = <<<JS
-    /*Parent-Children accordion*/ 
-    
-    $('td.parent').find('span').text('+');
-    $('td.parent').find('span').css({"color":"red", "font-weight":"bolder", "margin-right": "10px"});    
-    $('td.parent').nextUntil('td.parent').slideUp(1, function(){});    
-    $('td.parent').click(function(){
-            $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
-            $(this).nextUntil('td.parent').slideToggle(100, function(){});
-     });
+        $('.Apply').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            console.log('clicking...');
+            $('.modal').modal('show')
+                            .find('.modal-body')
+                            .load(url); 
+         });
 JS;
 
 $this->registerJs($script);
