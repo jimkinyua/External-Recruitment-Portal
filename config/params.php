@@ -17,6 +17,7 @@ return [
     ],
     'ServiceName'=>[
         'JobsList'=>'JobsList',//55057
+        'JobsCard'=>'JobsCard',//55051
     ],
 
     'SystemConfigs'=>[

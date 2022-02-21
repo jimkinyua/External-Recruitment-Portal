@@ -1083,6 +1083,33 @@ class Navision extends Component
         return false;
     }
 
+    public function getRecordID($credentials, $soapWsdl,$Key)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->GetRecIdFromKey(['Key' => $Key]);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function readByRecID($credentials, $soapWsdl,$Key)
+    {
+
+        $RecordId = $this->getRecordID($credentials, $soapWsdl, $Key);
+
+        //Yii::$app->recruitment->printrr($RecordId);
+
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->ReadByRecId(['recId' => $RecordId->GetRecIdFromKey_Result]);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     private function createClientForLoginVerification($credentials, $soapWsdl)
     {
 

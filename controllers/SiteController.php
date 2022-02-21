@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\helpers\Html;
 use yii\filters\ContentNegotiator;
+use app\models\JobsCard;
 
 
 
@@ -148,6 +149,22 @@ class SiteController extends Controller
         return $result;
     }
 
+    public function actionView($Key){
+        $model = new JobsCard();
+        $service = Yii::$app->params['ServiceName']['JobsCard'];
+        $result = Yii::$app->navhelper->readByKey($service, urldecode($Key));
+
+        // echo '<pre>';
+        // print_r($result);
+        // exit;
+
+        // $model = $this->loadtomodel($result,$model);
+
+        return $this->render('view',[
+            'model' => $result,
+        ]);
+    }
+
     /**
      * Logout action.
      *
@@ -187,4 +204,32 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function loadtomodel($obj,$model){
+
+        if(!is_object($obj)){
+            return false;
+        }
+        $modeldata = (get_object_vars($obj)) ;
+        foreach($modeldata as $key => $val){
+            if(is_object($val)) continue;
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
+
+    public function loadpost($post,$model){ // load model with form data
+
+
+        $modeldata = (get_object_vars($model)) ;
+
+        foreach($post as $key => $val){
+
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
+    
 }
