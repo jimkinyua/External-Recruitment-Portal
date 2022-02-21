@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-
+        'css/floating-labels.css',
         //Datatable
         'https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css',
         'https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css',

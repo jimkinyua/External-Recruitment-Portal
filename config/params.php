@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'adminEmail' => 'jimkinyua25@gmail.com',
+    'senderEmail' => 'jimkinyua25@gmail.com',
+    'senderName' => 'Kemri Recruitment Test',
 
     'NavisionUsername'=>env('NavisionUsername'),
     'NavisionPassword'=>env('NavisionPassword'),
