@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'bsVersion' => '4.x', // this will set globally `bsVersion` to Bootstrap 5.x for all Krajee Extensions
+
     'adminEmail' => 'jimkinyua25@gmail.com',
     'senderEmail' => 'jimkinyua25@gmail.com',
     'senderName' => 'Kemri Recruitment Test',

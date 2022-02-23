@@ -171,6 +171,83 @@ class SiteController extends Controller
             Yii::$app->user->setReturnUrl(['site/apply','JobId'=> $RequisitionId, 'ApplicationMethod'=>$ApplicationMethod]);
            return Yii::$app->response->redirect(['site/login']);           
         }
+
+        if($ApplicationMethod == 'Auto'){
+            //Redirect to upload CV Page
+            return $this->render('upload-cv',[
+                'JobId' => $JobId,
+            ]);
+        }
+        
+    }
+
+    public function actionFileUpload(){
+        if (isset($_FILES)) {
+            $target_dir = "Applicant CVs/";
+            $target_file = $target_dir . basename($_FILES["CV"]["name"]); //Where To Save the PDF
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+            if (!file_exists('Applicant CVs')) {
+                mkdir('Applicant CVs', 0777, true);
+            }
+
+            if (move_uploaded_file($_FILES["CV"]["tmp_name"], $target_file)) {
+                // echo "The file ". htmlspecialchars( basename( $_FILES["CV"]["name"])). " has been uploaded.";
+                $this->ParseCV($target_file);
+              } else {
+                echo "Sorry, there was an error uploading your file.";
+              }
+            
+            // $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+        }
+    }
+
+    public function ParseCV($DocumentPath){
+        // open the file
+        $filepath = $DocumentPath;
+        // exit($filepath);
+        $handle = fopen($filepath, "r");
+        $contents = fread($handle, filesize($filepath));
+        fclose($handle);
+        
+        $modifiedDate = date("Y-m-d", filemtime($filepath));
+        
+        //encode to base64
+        $base64str = base64_encode($contents);
+        $data = ["DocumentAsBase64String" => $base64str, "DocumentLastModified" => $modifiedDate];
+        //other options here (see https://sovren.com/technical-specs/latest/rest-api/resume-parser/api/)
+        //use https://eu-rest.resumeparsing.com/v10/parser/resume if your account is in the EU data center or
+        //use https://au-rest.resumeparsing.com/v10/parser/resume if your account is in the AU data center
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://au-rest.resumeparsing.com/v10/parser/resume',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER=> false,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'sovren-accountid: 15004599',
+            'sovren-servicekey: GHM9Nn05W4aTUa1+3coOeB6ftcuJy2nsTsj7ucz1'
+        ),
+        CURLOPT_POSTFIELDS => json_encode($data),
+
+        ));
+
+        $response = curl_exec($curl);
+        return $response;
+        curl_close($curl);
+        echo '<pre>';
+        print_r($response);
+        exit;;
+
         
     }
     /**
