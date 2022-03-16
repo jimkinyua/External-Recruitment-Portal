@@ -28,7 +28,12 @@ $this->title = 'My Yii Application';
 
 $script = <<<JS
 
-    $(function(){
+    $(function(){ 
+    // SmartWizard initialize
+
+
+
+
         $('#example').DataTable({
             "ajax": '/site/get-vaccanices',
             paging: true,

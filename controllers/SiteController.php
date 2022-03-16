@@ -193,7 +193,7 @@ class SiteController extends Controller
 
             if (move_uploaded_file($_FILES["CV"]["tmp_name"], $target_file)) {
                 // echo "The file ". htmlspecialchars( basename( $_FILES["CV"]["name"])). " has been uploaded.";
-                $this->ParseCV($target_file);
+                return $this->ParseCV($target_file);
               } else {
                 echo "Sorry, there was an error uploading your file.";
               }
@@ -244,9 +244,9 @@ class SiteController extends Controller
         $response = curl_exec($curl);
         return $response;
         curl_close($curl);
-        echo '<pre>';
-        print_r($response);
-        exit;;
+        // echo '<pre>';
+        // print_r($response);
+        // exit;;
 
         
     }

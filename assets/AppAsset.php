@@ -27,13 +27,28 @@ class AppAsset extends AssetBundle
         'https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css',
 
         'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
+
+        //Smart Wizard
+        'https://cdn.jsdelivr.net/npm/smartwizard@5/dist/css/smart_wizard_all.min.css',
+
+        // the fileinput plugin styling CSS file -->
+        // 'https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css',
     ];
     public $js = [
         // 'https://code.jquery.com/jquery-3.5.1.js',
         'https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js',
         'https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js',
 
-        'https://use.fontawesome.com/releases/v5.3.1/js/all.js"'
+        'https://use.fontawesome.com/releases/v5.3.1/js/all.js',
+
+        //Smart Wizard
+        'https://cdn.jsdelivr.net/npm/smartwizard@5/dist/js/jquery.smartWizard.min.js',
+
+        'JquerySteps/jquery.steps.js',
+        'JquerySteps/jquery.steps.min.js'
+
+
+
     ];
     public $depends = [
         'yii\web\YiiAsset',
